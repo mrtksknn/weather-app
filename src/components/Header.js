@@ -1,34 +1,55 @@
 import React from 'react';
-import { Dropdown, DropdownButton } from "react-bootstrap";
+import {
+  InputLabel,
+  Select,
+  MenuItem,
+  Box,
+  FormControl
+} from '@mui/material';
 import Cities from "./Cities";
 import { useCity } from "../context/CityContext";
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 160,
+    },
+  },
+};
+
 const Header = () => {
   const { city, setCity } = useCity();
-  const handleCity = (e) => {
-    setCity(e);
+
+  const handleCity = (event) => {
+    setCity(event.target.value);
   };
 
   return (
-    <div className="bg-success p-2 text-white bg-opacity-75">
-      <DropdownButton
-        id="dropdown-basic-button"
-        title={city || "Select City"}
-        align="start"
-        onSelect={handleCity}
-      >
-        {Object.values(Cities).map((cityTr, index) => (
-          <Dropdown.Item
-            key={index}
-            eventKey={
-              cityTr.charAt(0).toUpperCase() + cityTr.slice(1).toLowerCase()
-            }
-          >
-            {cityTr}
-          </Dropdown.Item>
-        ))}
-      </DropdownButton>
-    </div>
+    <Box sx={{display: 'flex', alignItems: 'flex-start', width: '100%', background: '#f6fafd'}}>
+      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+        <InputLabel id="demo-select-small">{city || 'Select City'}</InputLabel>
+        <Select
+          labelId="demo-select-small"
+          id="demo-select-small"
+          value={city}
+          MenuProps={MenuProps}
+          label={city || 'Select City'}
+          onChange={handleCity}
+        >
+          {Object.values(Cities).map((cityTr, index) => (
+            <MenuItem
+              key={index}
+              value={cityTr}
+            >
+              {cityTr}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Box>
   )
 }
 
